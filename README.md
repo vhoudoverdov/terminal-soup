@@ -20,6 +20,15 @@ Together, the three engines span the mathematical spectrum from **discrete cellu
 
 ---
 
+# Visualization Gallery
+
+![Continuous Lenia](continuous-lenia.gif)
+![Gray Scott Coral Reef](gray-scott-coral-reef.gif)
+![Cyclic Automata](cyclic-ca.gif)
+![Color Palette Cycling](gif/color-palettes.gif)
+
+---
+
 ## The Three Simulation Engines
 
 ### 1. Gray-Scott Reaction-Diffusion (`--sim 1`)
