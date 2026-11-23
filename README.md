@@ -46,8 +46,6 @@ In [evolutionary game theory](https://en.wikipedia.org/wiki/Evolutionary_game_th
 ### 3. Continuous Lenia / SmoothLife (`--sim 3`)
 Developed by Bert Wang-Chak Chan ([*Lenia: Biology of Artificial Life*, Complex Systems 2019](https://arxiv.org/abs/1812.05433); see also [Lenia on Wikipedia](https://en.wikipedia.org/wiki/Lenia) and Stephan Rafler's [*SmoothLife*](https://arxiv.org/abs/1111.1567)), Lenia generalizes [Conway's Game of Life](https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life) by making space, time, and cell states continuous:
 
-$$A(t + \Delta t) = \operatorname{clip}\!\Big(A(t) + \Delta t \, G\big(K * A(t)\big),\; 0,\; 1\Big), \qquad G(u) = 2\exp\!\left(-\frac{(u - \mu)^2}{2\sigma^2}\right) - 1$$
-
 To run in real time in Python, **terminal-soup** evaluates the 2D circular kernel convolution $K * A$ in $O(N \log N)$ via Fast Fourier Transforms (`np.fft.fft2`), producing smooth, self-stabilizing soliton "micro-organisms" that glide, pulsate, and divide.
 
 ---
