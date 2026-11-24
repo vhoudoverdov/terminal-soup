@@ -17,7 +17,7 @@ Together, the three engines span the mathematical spectrum from **discrete cellu
 | :--- | :--- | :--- | :--- | :--- |
 | **1. Gray-Scott** | Continuous Limit ($\nabla^2, \Delta t$) | $(U, V) \in [0, 1]^2$ | [Reaction-Diffusion PDE](https://en.wikipedia.org/wiki/Reaction%E2%80%93diffusion_system) | Predator-Prey / Resource-Consumer |
 | **2. Cyclic Automata** | Discrete Lattice & Ticks | $s \in \{0, \dots, N-1\}$ | [Cyclic Cellular Automaton](https://en.wikipedia.org/wiki/Cyclic_cellular_automaton) | Spatial Rock-Paper-Scissors |
-| **3. Continuous Lenia** | Fine Grid ($\to \mathbb{R}^2, \Delta t$) | $A \in [0, 1]$ | Integro-Differential Convolution | Cooperation vs. Overcrowding |
+| **3. Continuous Lenia** | Fine Grid ($\to \mathbb{R}^2, \Delta t$) | $A \in [0, 1]$ | [Integro-Differential Convolution](https://math.libretexts.org/Courses/Irvine_Valley_College/Introduction_to_Differential_Equations_(IVC_Math_24)/03%3A_Laplace_Transformations/3.04%3A_Integro-Differential_Equations) | Cooperation vs. Overcrowding |
 
 ---
 
