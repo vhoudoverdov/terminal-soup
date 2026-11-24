@@ -3,6 +3,7 @@
 **terminal-soup** is an interactive terminal terrarium that simulates **emergent self-organization**, **biological morphogenesis**, and **spatial evolutionary game theory** in real time, purely with Unicode half-blocks (`▀`) and 24-bit ANSI true-color escape sequences.
 
 Created with Google Antigravity
+Vasken Houdoverdov
 
 ---
 
@@ -52,10 +53,10 @@ To run in real time in Python, **terminal-soup** evaluates the 2D circular kerne
 
 ## Under the Hood: 60 FPS Terminal Software Rendering
 
-1. **Square-Pixel Half-Block Canvas (`▀`)**: Terminal character cells have a ~`1:2` aspect ratio. By pairing the upper half-block character `▀` (`U+2580`) with a 24-bit foreground color (`\x1b[38;2;R;G;Bm`) for the top pixel and a 24-bit background color (`\x1b[48;2;R;G;Bm`) for the bottom pixel, a `120 × 40` terminal window becomes a **`120 × 80` square-pixel grid**.
+1. **Square-Pixel Half-Block Canvas (`▀`)**: Terminal character cells have a ~`1:2` aspect ratio. By pairing the upper half-block character `▀` (`U+2580`) with a 24-bit foreground color for the top pixel and a 24-bit background color for the bottom pixel, a `120 × 40` terminal window becomes a **`120 × 80` square-pixel grid**.
 2. **256-Color Cyclic Lookup Tables**: Each simulation outputs a `uint8` intensity field (`0..255`) mapped through a 256-entry RGB lookup table (supporting piecewise cyclic gradients and [Inigo Quilez cosine palettes](https://iquilezles.org/articles/palettes/)).
 3. **Run-Length Escape Elision**: Vectorized horizontal diffing emits ANSI color sequences only when a pixel's foreground or background index differs from its left neighbor, flushing each frame in a single tear-free `sys.stdout.write()` call.
-4. **SGR 1006 Mouse Tracking**: Enables `\x1b[?1000h\x1b[?1006h` so mouse clicks and drags map directly to sub-pixel coordinates $(x, 2y)$ to inject chemical or biological seeds live.
+4. **SGR 1006 Mouse Tracking**: Enables so mouse clicks and drags map directly to sub-pixel coordinates $(x, 2y)$ to inject chemical or biological seeds live.
 
 ---
 
@@ -71,7 +72,7 @@ pip install numpy
 python main.py
 ```
 
-### Launch Examples
+### Launch Specific Simulations
 
 ```powershell
 python main.py --sim 1             # Gray-Scott Reaction-Diffusion
@@ -81,7 +82,7 @@ python main.py --auto              # Autonomous "Lava Lamp" mode (slow parameter
 python main.py --sim 2 --palette 5 # Cyclic Automata with Thermal Cosine palette
 ```
 
-> **Tip:** Use a modern true-color terminal (**Windows Terminal**, **iTerm2**, **Alacritty**, **Kitty**, or **WezTerm**). Zooming out your terminal font size (`Ctrl` + `-`) dramatically increases the simulation grid resolution!
+> **Tip:** Use a modern true-color terminal (**Windows Terminal**, **iTerm2**, **Alacritty**, **Kitty**, or **WezTerm**). 
 
 ---
 
