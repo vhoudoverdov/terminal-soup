@@ -4,6 +4,8 @@
 
 Created with Google Antigravity
 
+Vasken Houdoverdov
+
 ---
 
 ## Overview: Local Rules, Global Emergence
@@ -16,7 +18,16 @@ Together, the three engines span the mathematical spectrum from **discrete cellu
 | :--- | :--- | :--- | :--- | :--- |
 | **1. Gray-Scott** | Continuous Limit ($\nabla^2, \Delta t$) | $(U, V) \in [0, 1]^2$ | [Reaction-Diffusion PDE](https://en.wikipedia.org/wiki/Reaction%E2%80%93diffusion_system) | Predator-Prey / Resource-Consumer |
 | **2. Cyclic Automata** | Discrete Lattice & Ticks | $s \in \{0, \dots, N-1\}$ | [Cyclic Cellular Automaton](https://en.wikipedia.org/wiki/Cyclic_cellular_automaton) | Spatial Rock-Paper-Scissors |
-| **3. Continuous Lenia** | Fine Grid ($\to \mathbb{R}^2, \Delta t$) | $A \in [0, 1]$ | Integro-Differential Convolution | Cooperation vs. Overcrowding |
+| **3. Continuous Lenia** | Fine Grid ($\to \mathbb{R}^2, \Delta t$) | $A \in [0, 1]$ | [Integro-Differential Convolution](https://math.libretexts.org/Courses/Irvine_Valley_College/Introduction_to_Differential_Equations_(IVC_Math_24)/03%3A_Laplace_Transformations/3.04%3A_Integro-Differential_Equations) | Cooperation vs. Overcrowding |
+
+---
+
+# Visualization Gallery
+
+![Continuous Lenia](gif/continuous-lenia.gif)
+![Gray Scott Coral Reef](gif/gray-scott-coral-reef.gif)
+![Cyclic Automata](gif/cyclic-ca.gif)
+![Color Palette Cycling](gif/color-palettes.gif)
 
 ---
 
@@ -37,18 +48,16 @@ In [evolutionary game theory](https://en.wikipedia.org/wiki/Evolutionary_game_th
 ### 3. Continuous Lenia / SmoothLife (`--sim 3`)
 Developed by Bert Wang-Chak Chan ([*Lenia: Biology of Artificial Life*, Complex Systems 2019](https://arxiv.org/abs/1812.05433); see also [Lenia on Wikipedia](https://en.wikipedia.org/wiki/Lenia) and Stephan Rafler's [*SmoothLife*](https://arxiv.org/abs/1111.1567)), Lenia generalizes [Conway's Game of Life](https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life) by making space, time, and cell states continuous:
 
-$$A(t + \Delta t) = \operatorname{clip}\!\Big(A(t) + \Delta t \, G\big(K * A(t)\big),\; 0,\; 1\Big), \qquad G(u) = 2\exp\!\left(-\frac{(u - \mu)^2}{2\sigma^2}\right) - 1$$
-
 To run in real time in Python, **terminal-soup** evaluates the 2D circular kernel convolution $K * A$ in $O(N \log N)$ via Fast Fourier Transforms (`np.fft.fft2`), producing smooth, self-stabilizing soliton "micro-organisms" that glide, pulsate, and divide.
 
 ---
 
 ## Under the Hood: 60 FPS Terminal Software Rendering
 
-1. **Square-Pixel Half-Block Canvas (`▀`)**: Terminal character cells have a ~`1:2` aspect ratio. By pairing the upper half-block character `▀` (`U+2580`) with a 24-bit foreground color (`\x1b[38;2;R;G;Bm`) for the top pixel and a 24-bit background color (`\x1b[48;2;R;G;Bm`) for the bottom pixel, a `120 × 40` terminal window becomes a **`120 × 80` square-pixel grid**.
+1. **Square-Pixel Half-Block Canvas (`▀`)**: Terminal character cells have a ~`1:2` aspect ratio. By pairing the upper half-block character `▀` (`U+2580`) with a 24-bit foreground color for the top pixel and a 24-bit background color for the bottom pixel, a `120 × 40` terminal window becomes a **`120 × 80` square-pixel grid**.
 2. **256-Color Cyclic Lookup Tables**: Each simulation outputs a `uint8` intensity field (`0..255`) mapped through a 256-entry RGB lookup table (supporting piecewise cyclic gradients and [Inigo Quilez cosine palettes](https://iquilezles.org/articles/palettes/)).
 3. **Run-Length Escape Elision**: Vectorized horizontal diffing emits ANSI color sequences only when a pixel's foreground or background index differs from its left neighbor, flushing each frame in a single tear-free `sys.stdout.write()` call.
-4. **SGR 1006 Mouse Tracking**: Enables `\x1b[?1000h\x1b[?1006h` so mouse clicks and drags map directly to sub-pixel coordinates $(x, 2y)$ to inject chemical or biological seeds live.
+4. **SGR 1006 Mouse Tracking**: Enables so mouse clicks and drags map directly to sub-pixel coordinates $(x, 2y)$ to inject chemical or biological seeds live.
 
 ---
 
@@ -64,7 +73,7 @@ pip install numpy
 python main.py
 ```
 
-### Launch Examples
+### Launch Specific Simulations
 
 ```powershell
 python main.py --sim 1             # Gray-Scott Reaction-Diffusion
@@ -74,7 +83,7 @@ python main.py --auto              # Autonomous "Lava Lamp" mode (slow parameter
 python main.py --sim 2 --palette 5 # Cyclic Automata with Thermal Cosine palette
 ```
 
-> **Tip:** Use a modern true-color terminal (**Windows Terminal**, **iTerm2**, **Alacritty**, **Kitty**, or **WezTerm**). Zooming out your terminal font size (`Ctrl` + `-`) dramatically increases the simulation grid resolution!
+> **Tip:** Use a modern true-color terminal (**Windows Terminal**, **iTerm2**, **Alacritty**, **Kitty**, or **WezTerm**). 
 
 ---
 
