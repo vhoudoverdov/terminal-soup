@@ -19,10 +19,11 @@ HELP = [
     "1-3 / \u2190 \u2192   switch simulation mode",
     "Mouse       click / drag to seed chemical / life",
     "Space       randomize / re-seed lattice",
+    "R           next regime / species (all 3 modes)",
     "M           mutate parameters (lava lamp shift)",
+    "S           toggle 2x2 supersampling (hi-res AA)",
     "P           next color palette",
     "C           toggle continuous palette flow",
-    "R           next parameter regime (Gray-Scott)",
     "D           color detail (256/128/64 levels)",
     "H           toggle bottom HUD",
     "?           toggle this help window",
@@ -37,6 +38,7 @@ class TerrariumApp:
         self.cur_sim_idx = (args.sim - 1) % len(self.sims)
         self.pal = PaletteManager(args.palette - 1)
         self.presenter = Presenter(shift=args.detail)
+        self.supersample = not args.no_ssaa
         self.hud = not args.no_hud
         self.help = False
         self.fps = 0.0
@@ -77,6 +79,9 @@ class TerrariumApp:
                 if hasattr(self.sim, "next_regime"):
                     self.sim.next_regime()
                     self.say(f"Regime: {self.sim.get_info()}")
+            elif k in ("s", "S"):
+                self.supersample = not self.supersample
+                self.say(f"2x2 Supersampling AA: {'ON' if self.supersample else 'OFF'}")
             elif k in ("p", "P"):
                 self.pal.next()
                 self.say(f"Palette: {self.pal.name}")
@@ -93,22 +98,24 @@ class TerrariumApp:
         return True
 
     def handle_mouse(self, mouse_events):
+        scale = 2 if self.supersample else 1
         for m_type, px, py in mouse_events:
             if m_type in ("down", "drag"):
-                self.sim.seed(px, py, radius=6)
+                self.sim.seed(px * scale, py * scale, radius=6 * scale)
 
     def overlay(self, cols, rows):
         s = []
         if self.hud:
             bar = " \u2502 "
             flow = " [FLOW]" if self.pal.cycle_enabled else ""
+            ssaa = " [2xAA]" if self.supersample else ""
             auto = " [AUTO]" if self.auto_mutate else ""
             if time.perf_counter() < self.toast_until:
                 info = self.toast
             else:
                 info = self.sim.get_info()
             text = (f" terminal-soup{bar}[{self.cur_sim_idx + 1}] {info}{bar}"
-                    f"{self.pal.name}{flow}{bar}{self.fps:4.1f} fps{auto}{bar}? help")
+                    f"{self.pal.name}{flow}{ssaa}{bar}{self.fps:4.1f} fps{auto}{bar}? help")
             s.append(f"\x1b[{rows};1H\x1b[0m\x1b[38;2;230;230;240;48;2;12;12;28m"
                      + text[:cols].ljust(cols))
 
@@ -149,10 +156,15 @@ class TerrariumApp:
                 self.sim.mutate()
                 self.last_mutate = now
 
-            # Step simulation on sub-pixel grid: (cols, rows * 2)
+            # Step simulation on sub-pixel grid (2x2 supersampled when self.supersample is enabled)
             w, h = cols, rows * 2
-            self.sim.resize(w, h)
-            idx = self.sim.step(dt)
+            scale = 2 if self.supersample else 1
+            self.sim.resize(w * scale, h * scale)
+            raw_idx = self.sim.step(dt)
+            if scale == 2:
+                idx = raw_idx.reshape(h, 2, w, 2).mean(axis=(1, 3)).astype(np.uint8)
+            else:
+                idx = raw_idx
 
             self.pal.update(dt)
             lut = self.pal.lut()
@@ -175,7 +187,8 @@ def parse_args():
     p.add_argument("--sim", type=int, default=1, choices=(1, 2, 3), help="Starting simulation: 1=Gray-Scott, 2=Cyclic, 3=Lenia")
     p.add_argument("--palette", type=int, default=1, help="Starting palette 1-6")
     p.add_argument("--fps", type=float, default=60.0)
-    p.add_argument("--detail", type=int, default=1, choices=(0, 1, 2), help="Color detail (0=256, 1=128, 2=64)")
+    p.add_argument("--detail", type=int, default=0, choices=(0, 1, 2), help="Color detail (0=256, 1=128, 2=64)")
+    p.add_argument("--no-ssaa", action="store_true", help="Start with 2x2 supersampling disabled (1:1 pixel grid)")
     p.add_argument("--auto", action="store_true", help="Enable continuous lava lamp parameter drift")
     p.add_argument("--no-hud", action="store_true", help="Hide HUD bar")
     p.add_argument("--duration", type=float, default=0, help="Exit after N seconds")

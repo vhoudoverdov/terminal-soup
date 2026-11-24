@@ -85,8 +85,9 @@ python main.py --sim 2 --palette 5 # Cyclic Automata with Thermal Cosine palette
 | **Mouse Click / Drag** | **Drop Seed** | Inject chemical morphogens, spiral defects, or Lenia organisms at cursor |
 | **`1` / `2` / `3`** | **Switch Engine** | `1`: Gray-Scott, `2`: Cyclic Automata, `3`: Continuous Lenia |
 | **`←` / `→`** | **Prev / Next Engine** | Cycle backward or forward through the 3 simulation engines |
-| **`R`** | **Cycle Regime** | Step through curated parameter regimes (Corals, Mitosis, Spirals, Vortices, etc.) |
+| **`R`** | **Cycle Regime / Species** | Step through curated parameter regimes & Lenia species (Corals, Mitosis, Spirals, Orbium, Hydrogeminium) |
 | **`M`** | **Mutate Parameters** | Perturb $(F, k)$, neighborhood rules, or growth $(\mu, \sigma)$ on the fly |
+| **`S`** | **Toggle 2×2 Supersampling** | Toggle $2\times 2$ internal supersampling anti-aliasing (`[2xAA]`, enabled by default) |
 | **`Space`** | **Re-seed Terrarium** | Clear and re-nucleate the grid with fresh random colonies |
 | **`P`** | **Next Color Palette** | Crossfade between 6 palettes (*Psychedelic Bio*, *Deep Coral*, *Lava Lamp*, *Acid Matrix*, *Thermal Cosine*, *Abyssal Chem*) |
 | **`C`** | **Toggle Palette Flow** | Continuously rotate palette hues across existing structures |
