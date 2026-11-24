@@ -3,6 +3,7 @@
 **terminal-soup** is an interactive terminal terrarium that simulates **emergent self-organization**, **biological morphogenesis**, and **spatial evolutionary game theory** in real time, purely with Unicode half-blocks (`▀`) and 24-bit ANSI true-color escape sequences.
 
 Created with Google Antigravity
+
 Vasken Houdoverdov
 
 ---
